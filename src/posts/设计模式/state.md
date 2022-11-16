@@ -140,3 +140,96 @@ class ConcreteStateB : State
 当前是状态A
 当前是状态B 
 ```
+
+## 状态模式的拓展
+
+在有些情况下，可能有多个环境对象需要共享一组状态，这时需要引入享元模式，将这些具体状态对象放在集合中供程序共享，其结构图：
+
+![享元模式](https://colinaa.blob.core.windows.net/img/state-2.gif "享元模式结构图")
+
+共享状态模式的不同之处是在环境类中增加了一个 Dictionary 来保存相关状态，当需要某种状态时可以从中获取，其程序代码如下：
+
+``` cs
+class Program
+{
+    static void Main(string[] args)
+    {
+        ShareContext context = new ShareContext();
+        context.Handle();
+        context.Handle();
+        context.Handle();
+        context.Handle();
+        Console.ReadKey();
+    }
+}
+/// <summary>
+/// 环境类
+/// </summary>
+class ShareContext
+{
+    private ShareState state;
+    private Dictionary<string, ShareState> stateSet = new Dictionary<string, ShareState>();
+
+    //定义初始状态
+    public ShareContext()
+    {
+        this.state = new ConcreteStateA();
+        stateSet.Add("1", new ConcreteStateA());
+        stateSet.Add("2", new ConcreteStateB());
+
+    }
+    public void setState(ShareState state)
+    {
+        this.state = state;
+    }
+    // 获取当前状态
+    public ShareState getState(string key)
+    {
+        ShareState state = stateSet[key];
+        return state;
+    }
+    // 对请求进行处理
+    public void Handle()
+    {
+        state.Handle(this);
+    }
+}
+/// <summary>
+/// 抽象状态类
+/// </summary>
+abstract class ShareState
+{
+    public abstract void Handle(ShareContext context);
+}
+/// <summary>
+/// 具体状态A
+/// </summary>
+class ConcreteStateA : ShareState
+{
+    public override void Handle(ShareContext context)
+    {
+        Console.WriteLine("当前是状态A");
+        context.setState(context.getState("2"));
+    }
+}
+/// <summary>
+/// 具体状态B
+/// </summary>
+class ConcreteStateB : ShareState
+{
+    public override void Handle(ShareContext context)
+    {
+        Console.WriteLine("当前是状态B");
+        context.setState(context.getState("1"));
+    }
+}
+```
+
+运行结果
+
+``` cs
+当前是状态A
+当前是状态B
+当前是状态A
+当前是状态B
+```
