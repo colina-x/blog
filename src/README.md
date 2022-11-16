@@ -9,9 +9,9 @@ tagline: 生活处处有惊喜
 heroFullScreen: true
 projects:
   - icon: project
-    name: 项目名称
-    desc: 项目详细描述
-    link: https://你的项目链接
+    name: p2p聊天系统
+    desc: 基于C#中socket的p2p聊天系统
+    link: https://github.com/colina-x/P2P-chat-system
 
   - icon: link
     name: 链接名称
@@ -29,9 +29,9 @@ projects:
     link: https://你的文章链接
 
   - icon: friend
-    name: 伙伴名称
-    desc: 伙伴详细介绍
-    link: https://你的伙伴链接
+    name: zlaa的博客
+    desc: zlaa的博客
+    link: https://blog.zlaaa.top
 
   - icon: /logo.svg
     name: 自定义项目

@@ -23,7 +23,7 @@ export const zhNavbar = navbar([
       // { text: "火龙果", icon: "edit", link: "dragonfruit" },
       // "tomato",
       // "strawberry",
-      { text: "HTML总结", icon: "edit", link: "2020-11-13-test" },
+      { text: "HTML总结", icon: "edit", link: "html-1" },
     ],
   },
   {

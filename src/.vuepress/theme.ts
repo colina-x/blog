@@ -6,7 +6,7 @@ export default hopeTheme({
   hostname: "https://colina-x.github.io",
 
   author: {
-    name: "Colian",
+    name: "Colina",
     url: "https://colinaa.top",
   },
 
@@ -106,11 +106,11 @@ export default hopeTheme({
       /**
        * Using Giscus
        */
-      provider: "Giscus",
-      repo: "vuepress-theme-hope/giscus-discussions",
-      repoId: "R_kgDOG_Pt2A",
-      category: "Announcements",
-      categoryId: "DIC_kwDOG_Pt2M4COD69",
+      // provider: "Giscus",
+      // repo: "vuepress-theme-hope/giscus-discussions",
+      // repoId: "R_kgDOG_Pt2A",
+      // category: "Announcements",
+      // categoryId: "DIC_kwDOG_Pt2M4COD69",
 
       /**
        * Using Twikoo

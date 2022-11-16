@@ -61,50 +61,71 @@ sticky: true
 - 状态模式的实现
 
 ```cs
-public class StatePatternClient {
-    static void Main(string[] args) {
-        Context context = new Contet();// 创建环境
-		  context.Handle();// 处理请求
-		  context.Handle();
+class Program
+{
+    static void Main(string[] args)
+    {
+        Context context = new Context();
         context.Handle();
         context.Handle();
+        context.Handle();
+        context.Handle();
+        Console.ReadKey();
     }
 }
-// 环境类
-class Context {
+/// <summary>
+/// 环境类
+/// </summary>
+class Context
+{
     private State state;
-		
+
     //定义初始状态
-    public Conrtext() {
+    public Context()
+    {
         this.state = new ConcreteStateA();
     }
     // 设置状态
-    public void setState(State state) {
+    public void setState(State state)
+    {
         this.state = state;
     }
     // 获取当前状态
-    public State getState() {
+    public State getState()
+    {
         return state;
     }
     // 对请求进行处理
-    public void Handle() {
+    public void Handle()
+    {
         state.Handle(this);
     }
 }
-// 抽象状态类
-abstract class State {
+/// <summary>
+/// 抽象状态类
+/// </summary>
+abstract class State
+{
     public abstract void Handle(Context context);
 }
-// 具体状态A
-class ConcreteStateA : State {
-    public void Handle(Context context) {
+/// <summary>
+/// 具体状态A
+/// </summary>
+class ConcreteStateA : State
+{
+    public override void Handle(Context context)
+    {
         Console.WriteLine("当前是状态A");
         context.setState(new ConcreteStateB());
     }
 }
-// 具体状态B
-class ConcreteStateB : State {
-    public void Handle(Context context) {
+/// <summary>
+/// 具体状态B
+/// </summary>
+class ConcreteStateB : State
+{
+    public override void Handle(Context context)
+    {
         Console.WriteLine("当前是状态B");
         context.setState(new ConcreteStateA());
     }
@@ -112,3 +133,10 @@ class ConcreteStateB : State {
 ```
 
 运行结果
+
+```
+当前是状态A
+当前是状态B
+当前是状态A
+当前是状态B 
+```
