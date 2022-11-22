@@ -1,5 +1,5 @@
 /node_modules
-/src/.vuepeess/.cache
+/src/.vuepress/.cache
 /src/.vuepress/.temp
 /img
 /src/.vuepress/dist
