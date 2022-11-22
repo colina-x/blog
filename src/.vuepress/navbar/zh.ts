@@ -13,8 +13,8 @@ export const zhNavbar = navbar([
         icon: "edit",
         prefix: "设计模式/",
         children: [
+          { text: "简单工厂模式", icon: "edit", link: "simpleFactory" },
           { text: "状态模式", icon: "edit", link: "state" },
-          // { text: "苹果2", icon: "edit", link: "2" },
           // "3",
           // "4",
         ],
@@ -24,6 +24,17 @@ export const zhNavbar = navbar([
       // "tomato",
       // "strawberry",
       { text: "HTML总结", icon: "edit", link: "html-1" },
+      {
+        text: "Aniloc的分享",
+        icon: "edit",
+        prefix: "Aniloc/",
+        children: [
+          { text: "JS对象", icon: "edit", link: "js-object" },
+          { text: "测试", icon: "edit", link: "test" },
+          // "3",
+          // "4",
+        ],
+      },
     ],
   },
   {
