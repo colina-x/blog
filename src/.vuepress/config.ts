@@ -10,11 +10,6 @@ export default defineUserConfig({
       title: "Colinaの小窝",
       description: "一个分享技术的网站",
     },
-    /*"/zh/": {
-      lang: "zh-CN",
-      title: "博客演示",
-      description: "vuepress-theme-hope 的博客演示",
-      },*/
   },
 
   theme,

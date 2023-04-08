@@ -19,6 +19,16 @@ export const zhNavbar = navbar([
           // "4",
         ],
       },
+      {
+        text: "算法",
+        icon: "edit",
+        prefix: "算法/",
+        children: [
+          { text: "Perlin噪声", icon: "edit", link: "perlin" },
+          // "3",
+          // "4",
+        ],
+      },
       // { text: "樱桃", icon: "edit", link: "cherry" },
       // { text: "火龙果", icon: "edit", link: "dragonfruit" },
       // "tomato",
@@ -46,6 +56,6 @@ export const zhNavbar = navbar([
   {
     text: "V2 文档",
     icon: "note",
-    link: "https://vuepress-theme-hope.github.io/v2/zh/",
+    link: "https://theme-hope.vuejs.vuepress/zh/",
   },
 ]);
