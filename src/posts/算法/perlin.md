@@ -24,6 +24,7 @@ star: true
 
 - fade函數：$6t^5-15t^4+10t^3$
 - 綫性插值函數：$f(t)=a+t*(b-a)$
+
 ``` CS
 class Perlin
     {

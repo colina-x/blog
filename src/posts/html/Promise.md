@@ -136,4 +136,3 @@ asyncFunc1(opt, (...args1) => {
 1. `promises`: 包含n个 promise 的数组
 
 * 说明：返回一个新的 promise 对象，第一个完成的 promise 的结果状态就是最终的结果状态
-

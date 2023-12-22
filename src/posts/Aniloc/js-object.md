@@ -50,5 +50,3 @@ js中本身存在两个函数对象: Function和Object
 除了`Object.prototype`本身（为null）。
 
 在查找一个对象的属性时，js先查找本身，找不到就顺着`__proto__`往上找，直到null。
-
-
