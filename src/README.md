@@ -23,15 +23,21 @@ projects:
     desc: 书籍详细描述
     link: https://你的书籍链接
 
-  - icon: article
-    name: 文章名称
-    desc: 文章详细描述
-    link: https://你的文章链接
+  # - icon: article
+  #   name: 文章名称
+  #   desc: 文章详细描述
+  #   link: https://你的文章链接
+
+  - icon: friend
+    name: 809的博客
+    desc: 809的博客
+    link: https://www.briseras.top/
 
   - icon: friend
     name: zlaa的博客
     desc: zlaa的博客
-    link: https://blog.zlaaa.top
+    # link: https://blog.zlaaa.top
+    link: https://colinaa.blob.core.windows.net/img/7193e99e8ad085228e7e00dd45e88437.jpg
 
   - icon: /logo.svg
     name: 自定义项目
