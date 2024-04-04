@@ -9,6 +9,17 @@ export const zhNavbar = navbar([
     prefix: "/posts/",
     children: [
       {
+        text: "C++",
+        icon: "edit",
+        prefix: "CPlusPlus/",
+        children: [
+          { text: "值和引用", icon: "edit", link: "value" },
+          { text: "模板01", icon: "edit", link: "template1" },
+          // "3",
+          // "4",
+        ],
+      },
+      {
         text: "设计模式",
         icon: "edit",
         prefix: "设计模式/",
@@ -30,10 +41,6 @@ export const zhNavbar = navbar([
           // "4",
         ],
       },
-      // { text: "樱桃", icon: "edit", link: "cherry" },
-      // { text: "火龙果", icon: "edit", link: "dragonfruit" },
-      // "tomato",
-      // "strawberry",
       {
         text: "前端",
         icon: "edit",
@@ -43,17 +50,10 @@ export const zhNavbar = navbar([
           { text: "HTML总结", icon: "edit", link: "html-1" },
         ],
       },
-      {
-        text: "C++",
-        icon: "edit",
-        prefix: "CPlusPlus/",
-        children: [
-          { text: "值和引用", icon: "edit", link: "value" },
-          { text: "模板01", icon: "edit", link: "template1" },
-          // "3",
-          // "4",
-        ],
-      },
+      // { text: "樱桃", icon: "edit", link: "cherry" },
+      // { text: "火龙果", icon: "edit", link: "dragonfruit" },
+      // "tomato",
+      // "strawberry",
     ],
   },
   {
