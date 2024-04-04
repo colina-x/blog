@@ -25,6 +25,7 @@ export const zhNavbar = navbar([
         prefix: "算法/",
         children: [
           { text: "Perlin噪声", icon: "edit", link: "perlin" },
+          { text: "二分搜索", icon: "edit", link: "bound" },
           // "3",
           // "4",
         ],
@@ -43,12 +44,14 @@ export const zhNavbar = navbar([
         ],
       },
       {
-        text: "Aniloc的分享",
+        text: "C++",
         icon: "edit",
-        prefix: "Aniloc/",
+        prefix: "CPlusPlus/",
         children: [
-          { text: "JS对象", icon: "edit", link: "js-object" },
-          { text: "测试", icon: "edit", link: "test" },
+          { text: "值和引用", icon: "edit", link: "value" },
+          { text: "模板01", icon: "edit", link: "template1" },
+          // "3",
+          // "4",
         ],
       },
     ],
