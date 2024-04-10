@@ -134,4 +134,249 @@ int a = 10;            // 不重要
 ::forward<int&&>(a);   // 返回 int&& 因为 Ty 是 int&&，Ty&& 就是 int&&
 ```
 
+## 5. 有默认实参的模板类型形参
+
+简单的例子：
+
+```cpp
+template<typename T = int>
+void f();
+
+f();            // 默认为 f<int>
+f<double>();    // 显式指明为 f<double>
+```
+
+```cpp
+using namespace std::string_literals;
+
+template<typename T1,typename T2,typename RT = 
+    decltype(true ? T1{} : T2{}) >
+
+RT max(const T1& a, const T2& b) { // RT 是 std::string
+    return a > b ? a : b;
+}
+
+int main(){
+    auto ret = ::max("1", "2"s);
+    std::cout << ret << '\n';
+}
+```
+
+这样 `max(const T1& a, const T2& b)` 函数可以接受两个不同类型的参数，返回类型 `typename RT = decltype(true ? T1{} : T2{})` 为T1与T2的“公共类型”，详细可见 `decltype` 的说明。
+
+可以使用C++11的后置返回类型简化：
+
+```cpp
+template<typename T,typename T2>
+auto max(const T& a, const T2& b) -> decltype(true ? a : b){
+    return a > b ? a : b;
+}
+```
+
+但是**这两种返回类型是不同的**，使用后置返回类型推断的是a的类型即 `const T&` ，而默认模板实参是 `T`
+
+C++20简写函数模板可以写为：
+```cpp
+decltype(auto) max(const auto& a, const auto& b)  {
+    return a > b ? a : b;
+}
+```
+
+注意 `auto` 与 `decltype(auto)` 的区别。
+
+## 6. 非类型模板形参
+
+非类型模板形参，就是模板不接受类型，而是接受值或对象
+
+```cpp
+template<std::size_t N>
+void f() { std::cout << N << '\n'; }
+
+f<100>();
+```
+
+非类型模板形参当然也可以有默认值：
+
+```cpp
+template<std::size_t N = 100>
+void f() { std::cout << N << '\n'; }
+
+f();     // 默认      f<100>
+f<66>(); // 显式指明  f<66>
+```
+
+## 7. 重载函数模板
+
+函数模板与非模板函数可以重载。例如：
+
+```cpp
+template<typename T>
+void test(T) { std::puts("template"); }
+
+void test(int) { std::puts("int"); }
+
+test(1);        // 匹配到test(int)
+test(1.2);      // 匹配到模板
+test("1");      // 匹配到模板
+```
+
+- ***通常优先选择非模板的函数***。
+
+## 8. 可变参数模板
+
+C++可以用模板做到可变参数
+
+### 形参包
+
+(模板形参包)[https://zh.cppreference.com/w/cpp/language/parameter_pack]是接受零个或更多个模板实参（非类型、类型或模板）的模板形参。函数形参包是接受零个或更多个函数实参的函数形参。
+
+```cpp
+template<typename...Args>
+void sum(Args...args){}
+```
+
+**args 是函数形参包，Args 是类型形参包，它们的名字我们可以自定义。**
+
+**args 里，就存储了我们传入的全部的参数，Args 中存储了我们传入的全部参数的类型。**
+
+### 形参包展开
+
+想使用形参包就需要(形参包展开)[https://zh.cppreference.com/w/cpp/language/parameter_pack#.E5.8C.85.E5.B1.95.E5.BC.80]
+
+```cpp
+void f(const char*, int, double) { puts("值"); }
+void f(const char**, int*, double*) { puts("&"); }
+
+template<typename...Args>
+void sum(Args...args){  // const char * args0, int args1, double args2
+    f(args...);   // 相当于 f(args0, args1, args2)
+    f(&args...);  // 相当于 f(&args0, &args1, &args2)
+}
+
+int main() {
+    sum("luse", 1, 1.2);
+}
+```
+
+sum 的 `Args...args` 被展开为 `const char * args0, int args1, double args2`。
+
+后随省略号且其中至少有一个形参包的名字的**模式**会被展开成零个或更多个**逗号分隔**的模式实例。
+
+`&args...` 中 `&args` 就是模式，在展开的时候，模式，也就是省略号前面的一整个表达式，会被不停的填入对象并添加 `&`，然后逗号分隔。直至形参包的元素被消耗完。
+
+下面的例子是一个打印所有参数的函数：
+
+```cpp
+template<typename...Args>
+void print(const Args&...args){    // const char (&args0)[5], const int & args1, const double & args2
+    int _[]{ (std::cout << args << ' ' ,0)... };
+}
+
+int main() {
+    print("luse", 1, 1.2);
+}
+```
+
+`(std::cout << args << ' ' ,0)...` 是一个包展开，它的模式是`(std::cout << args << ' ' ,0)`，实际展开的时候是：
+
+```cpp
+(std::cout << arg0 << ' ' ,0), (std::cout << arg1 << ' ' ,0),(std::cout << arg2 << ' ' ,0)
+```
+
+但是为什么要括号里加个逗号零呢？这是因为逗号表达式是从左往右执行的，返回最右边的值作为整个逗号表达式的值，也就是说：每一个 `(std::cout << arg0 << ' ' ,0)` 都会返回 0，这主要是为了符合语法，用来初始化数组。我们创建了一个数组 `int _[]` ，最终这些 `0` 会用来初始化这个数组，当然，这个数组本身没有用，**只是为了创造合适的(包展开场所)[https://zh.cppreference.com/w/cpp/language/parameter_pack#.E5.B1.95.E5.BC.80.E5.9C.BA.E6.89.80]**。
+
+- ***只有在合适的形参包展开场所才能进行形参包展开***。
+
+```cpp
+template<typename ...Args>
+void print(const Args &...args) {
+   (std::cout << args << " ")...; // 不是合适的形参包展开场所 Error！
+}
+```
+
+还有一个数组的示例：
+
+```cpp
+template<typename...Args>
+void print(const Args&...args) {
+    int _[]{ (std::cout << args << ' ' ,0)... };
+}
+
+template<typename T,std::size_t N, typename...Args>
+void f(const T(&array)[N], Args...index) {
+    print(array[index]...);
+}
+
+int main() {
+    int array[10]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    f(array, 1, 3, 5);
+}
+```
+
+`const T(&array)[N]` 注意，这是一个数组引用，我们也使用到了非类型模板形参 `N`；加括号，`(&array)` 只是为了区分优先级。那么这里的 `T` 是 `int`，`N` 是 10，组成了一个数组类型。
+
+`print(array[index]...)`; 其中 `array[index]...` 是包展开，`array[index]` 是模式，实际展开的时候就是：
+
+`array[arg0], array[arg1], array[arg2]`
+
+### 总结
+
+现在有一个小需求：需要一个函数 `sum`，支持 `sum(1,2,3.5,x,n...)` 即函数 `sum` 支持任意类型，任意个数的参数进行调用，你应该如何实现？
+
+```cpp
+#include <iostream>
+#include <type_traits>
+
+template<typename...Args,typename RT = std::common_type_t<Args...>>
+RT sum(const Args&...args) {
+    RT _[]{ static_cast<RT>(args)... };
+    RT n{};
+    for (int i = 0; i < sizeof...(args); ++i) {
+        n += _[i];
+    }
+    return n;
+}
+
+int main() {
+    double ret = sum(1, 2, 3, 4, 5, 6.7);
+    std::cout << ret << '\n';       // 21.7
+}
+```
+
+`std::common_type_t` 的作用很简单，就是确定我们传入的共用类型，说白了就是这些东西都能隐式转换到哪个，那就会返回那个类型。
+
+`RT _[]{ static_cast<RT>(args)... };` 创建一个数组，形参包在它的初始化器中展开，初始化这个数组，数组存储了我们传入的全部的参数。
+
+- 因为(窄化转换)[https://zh.cppreference.com/w/cpp/language/list_initialization#.E7.AA.84.E5.8C.96.E8.BD.AC.E6.8D.A2]禁止了列表初始化中 `int` 到 `double` 的隐式转换，所以我们需要显式的转换为“公共类型” `RT`。
+
+`sizeof...` 单纯的获取形参包的元素个数。
+
+调用标准库简化：
+```cpp
+template<typename...Args,typename RT = std::common_type_t<Args...>>
+RT sum(const Args&...args) {
+    RT _[]{ args... };
+    return std::accumulate(std::begin(_), std::end(_), RT{});
+}
+```
+
+`RT{}` 构造一个临时无名对象，表示初始值，`std::begin` 和 `std::end` 可以获取数组的首尾地址。
+
+非类型模板形参也可以使用形参包：
+
+```cpp
+template<std::size_t... N>
+void f(){
+    std::size_t _[]{ N... }; // 展开相当于 1UL, 2UL, 3UL, 4UL, 5UL
+    std::for_each(std::begin(_), std::end(_), 
+        [](std::size_t n){
+            std::cout << n << ' ';
+        }
+    );
+}
+f<1, 2, 3, 4, 5>();
+```
+
+## 9. 模板分文件
+
 参考自 [现代C++模板教程](https://mq-b.github.io/Modern-Cpp-templates-tutorial/md/%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86-%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/01%E5%87%BD%E6%95%B0%E6%A8%A1%E6%9D%BF)
